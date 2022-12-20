@@ -5,12 +5,13 @@ const getAppConfigSrc=(mode) =>{
   return mode.indexOf('nested')>-1 ?'../src/nested/main.ts':'../src/main.ts'
 }
 const getSingleHtml=(mode: string):PluginOption =>{
-  console.error(mode,'modemodemodemodemodemodemodemode');
-  
   return createHtmlPlugin({
     minify: false,
     template: 'public/index.html',
     inject: {
+     data:{
+      title: mode.indexOf('nested')>-1 ?'辅助系统':'主系统'
+     },
       tags:[
         {
           tag: 'script',
@@ -26,12 +27,15 @@ const getSingleHtml=(mode: string):PluginOption =>{
 
 const getAllHtml=():PluginOption =>{
     return createHtmlPlugin({
-      minify: true,
+      minify: false,
       pages: [
         {
           filename: 'index.html',
           template: 'public/index.html',
           injectOptions: {
+            data:{
+              title:'index'
+            },
             tags: [
               {
                 tag: 'script',
@@ -47,6 +51,9 @@ const getAllHtml=():PluginOption =>{
           filename: 'nested.html',
           template: 'public/nested.html',
           injectOptions: {
+            data:{
+              title:'nested'
+            },
             tags: [
               {
                 tag: 'script',
@@ -64,8 +71,6 @@ const getAllHtml=():PluginOption =>{
 
 const html = (env: ConfigEnv) => {
   const {mode} = env
-  console.error(env,'envenvenv');
-  
   return mode==='build'? getAllHtml():getSingleHtml(mode)
 }
 
